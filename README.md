@@ -4,6 +4,8 @@ This is a CLI package that replaces values in a JSON file to their types in eith
 
 If you work on developing API, you'll agree that it's important to have a good understanding of the data that's being sent to and from the API/server. This package aims to make that process easier by generating valid "types" for your JSON response(s) via feeding it with a sample of an actual response (stored in a JSON file).
 
+You can also, of course, use it to generate valid type interface for your TypeScript code.
+
 > ##### By the way, "Nkem" is a word that means "my own" in Igbo language.😉
 
 ## Installation

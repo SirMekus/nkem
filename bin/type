@@ -4,7 +4,7 @@
 // Autoloader
 $autoloadPaths = [
     __DIR__ . '/../vendor/autoload.php', // running in root of repo
-    __DIR__ . '/../../autoload.php', // running as vendor/bin
+    __DIR__ . __DIR__ . '/../../../autoload.php', // running as vendor/bin
 ];
 foreach ($autoloadPaths as $path) {
     if (file_exists($path)) {
