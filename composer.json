@@ -1,5 +1,5 @@
 {
-    "name": "emmy/nkem",
+    "name": "sirmekus/nkem",
     "description": "A package that replaces values in a JSON file to their \\\"types\\\" in either Typescript, JSON or PHP",
     "type": "library",
     "license": "MIT",
@@ -10,7 +10,7 @@
     },
     "authors": [
         {
-            "name": "SirMekus",
+            "name": "SirMekus (Emmy Boy)",
             "email": "mekus600@gmail.com"
         }
     ],
