@@ -2,9 +2,9 @@
 
 This is a CLI package that replaces values in a JSON file to their types in either Typescript or JSON.
 
-If you work on developing API, you'll agree that it's important to have a good understanding of the data that's being sent to and from the API/server. This package aims to make that process easier by generating types for your JSON files via feeding it with a sample of an actual response (stored in a JSON file).
+If you work on developing API, you'll agree that it's important to have a good understanding of the data that's being sent to and from the API/server. This package aims to make that process easier by generating valid "types" for your JSON response(s) via feeding it with a sample of an actual response (stored in a JSON file).
 
-> By the way, "Nkem" is a word that means "my own" in Igbo language.  😉
+> ##### By the way, "Nkem" is a word that means "my own" in Igbo language.😉
 
 ## Installation
 
@@ -25,7 +25,13 @@ After installing the package, run it in your terminal like so:
 If you want its TypeScript representation, run it like so:
 
 ```bash
-./vendor/bin/type path/to/your.json ts
+./vendor/bin/type path/to/your.json --format=ts
+```
+
+By default, the generated file will retain the name of the supplied JSON file with "-type" appended to it. You can change this behavior by using the `--name` flag. For example, if you want to name the generated file "custom-name.ts", you can run it like so (without the extension):
+
+```bash
+./vendor/bin/type path/to/your.json --format=ts --name=custom-name
 ```
 
 ## Limitations
@@ -40,7 +46,7 @@ Primarily, the package does the heavy lifting of generating the types for you.
 
 ## Contributing
 
-Contributions are welcome! Please open an issue or submit a pull request.
+Of course, there can always be room (and parlour 😁) for improvement. If you have any suggestions or ideas, please feel free to open an issue or submit a pull request.
 
 ## License
 

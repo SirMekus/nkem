@@ -1,45 +1,94 @@
 #!/usr/bin/env php
 <?php
 
-require __DIR__ . '/../vendor/autoload.php';
+// Autoloader
+$autoloadPaths = [
+    __DIR__ . '/../vendor/autoload.php', // running in root of repo
+    __DIR__ . '/../../autoload.php', // running as vendor/bin
+];
+foreach ($autoloadPaths as $path) {
+    if (file_exists($path)) {
+        require $path;
+        break;
+    }
+}
 
 use Emmy\Nkem\Type;
 
-function printHelp()
+function printHelp(): void
 {
     echo <<<TXT
+🔧 JSON Type Replacer
+
 Usage:
-  type <path-to-json-file> [php|ts]
+  ./vendor/bin/type <input-file> [--format=js|ts] [--name=output-file]
+
+Options:
+  --format     Output format type. Options: js, ts. Default: js
+  --name       Custom name for the output file (e.g. "types.ts")
 
 Examples:
-  type data.json php
-  type data.json ts
+  ./vendor/bin/type data.json
+  ./vendor/bin/type data.json --format=ts
+  ./vendor/bin/type data.json --format=ts --name=output-name
 
 TXT;
 }
 
-if ($argc < 2) {
+$args = $argv;
+array_shift($args);
+
+$inputPath = null;
+$format = 'js';
+$outputName = null;
+
+foreach ($args as $arg) {
+    if (str_starts_with($arg, '--format=')) {
+        $format = substr($arg, strlen('--format='));
+    } elseif (str_starts_with($arg, '--name=')) {
+        $outputName = substr($arg, strlen('--name='));
+    } elseif (!$inputPath && !str_starts_with($arg, '--')) {
+        $inputPath = $arg;
+    }
+}
+
+if (!$inputPath) {
+    echo "❌ Missing input file.\n";
     printHelp();
     exit(1);
 }
 
-$path = $argv[1];
-$format = $argv[2] ?? 'php';
-
-if (!in_array($format, ['php', 'ts'])) {
-    echo "Invalid format: $format. Use 'php' or 'ts'.\n";
+if (!in_array($format, ['js', 'ts'])) {
+    echo "❌ Invalid format: $format. Use --format=js or --format=ts\n";
     exit(1);
 }
 
 try {
-    $output = Type::processJsonFile($path, $format);
+    $output = Type::processJsonFile($inputPath, $format);
+
+    $projectRoot = getcwd(). DIRECTORY_SEPARATOR . "nkem". DIRECTORY_SEPARATOR; 
+    
+    if (!is_dir($projectRoot)) {
+        mkdir($projectRoot, 0777, true);
+    }
+
+    $fileName = pathinfo($inputPath, PATHINFO_FILENAME);
 
     $ext = $format === 'ts' ? 'ts' : 'json';
-    $base = preg_replace('/\.json$/', '', $path);
-    $outPath = "{$base}-types.{$ext}";
+    $baseName = $outputName ?? (preg_replace('/\.json$/', '', $fileName) . '-types');
+    $outputPath = "{$projectRoot}{$baseName}.{$ext}";
 
-    file_put_contents($outPath, $output);
-    echo "✅ Output written to: $outPath\n";
+    // if ($outputName) {
+    //     $outputPath = $outputName;
+    // } else {
+    //     $baseName = $outputName ?? (preg_replace('/\.json$/', '', $inputPath) . '-types');
+    //     // $base = preg_replace('/\.json$/', '', basename($inputPath));
+    //     $ext = $format === 'ts' ? 'ts' : 'js';
+    //     $outputPath = "{$baseName}.{$ext}";
+    // }
+
+    file_put_contents($outputPath, $output);
+    echo "✅ Output written to: $outputPath\n";
 } catch (\Throwable $e) {
     echo "❌ Error: " . $e->getMessage() . PHP_EOL;
     exit(1);

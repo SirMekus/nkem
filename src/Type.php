@@ -4,7 +4,7 @@ namespace Emmy\Nkem;
 
 class Type
 {
-    public static function processJsonFile(string $path, string $format = 'php'): string
+    public static function processJsonFile(string $path, string $format = 'js'): string
     {
         if (!file_exists($path)) {
             throw new \InvalidArgumentException("File does not exist: $path");
@@ -18,19 +18,19 @@ class Type
         }
 
         return match ($format) {
-            'php' => json_encode(self::replaceTypes($data, 'php'), JSON_PRETTY_PRINT),
+            'js' => json_encode(self::replaceTypes($data, 'js'), JSON_PRETTY_PRINT),
             'ts'  => self::buildTsInterface($data),
             default => throw new \InvalidArgumentException("Unsupported format: $format")
         };
     }
 
-    public static function replaceTypes(mixed $input, string $format = 'php'): mixed
+    public static function replaceTypes(mixed $input, string $format = 'js'): mixed
     {
         if (is_array($input)) {
             if (self::isAssoc($input)) {
                 return array_map(fn($v) => self::replaceTypes($v, $format), $input);
             } else {
-                return $format === 'php' ? 'array' : 'Array<any>';
+                return $format === 'js' ? 'array' : 'Array<any>';
             }
         }
 
@@ -41,7 +41,7 @@ class Type
     {
         $phpType = gettype($value);
         $map = [
-            'php' => [
+            'js' => [
                 'boolean' => 'boolean',
                 'integer' => 'integer',
                 'double'  => 'float',
@@ -69,7 +69,7 @@ class Type
         return array_keys($arr) !== range(0, count($arr) - 1);
     }
 
-    public static function buildTsInterface(array $data, string $interfaceName = 'RootType'): string
+    public static function buildTsInterface(array $data, string $interfaceName = 'PayloadType'): string
     {
         $body = self::buildTsStructure($data, 1);
         return "interface {$interfaceName} {\n{$body}}\n";
