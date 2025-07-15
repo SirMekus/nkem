@@ -1,0 +1,46 @@
+#!/usr/bin/env php
+<?php
+
+require __DIR__ . '/../vendor/autoload.php';
+
+use Emmy\Nkem\Type;
+
+function printHelp()
+{
+    echo <<<TXT
+Usage:
+  type <path-to-json-file> [php|ts]
+
+Examples:
+  type data.json php
+  type data.json ts
+
+TXT;
+}
+
+if ($argc < 2) {
+    printHelp();
+    exit(1);
+}
+
+$path = $argv[1];
+$format = $argv[2] ?? 'php';
+
+if (!in_array($format, ['php', 'ts'])) {
+    echo "Invalid format: $format. Use 'php' or 'ts'.\n";
+    exit(1);
+}
+
+try {
+    $output = Type::processJsonFile($path, $format);
+
+    $ext = $format === 'ts' ? 'ts' : 'json';
+    $base = preg_replace('/\.json$/', '', $path);
+    $outPath = "{$base}-types.{$ext}";
+
+    file_put_contents($outPath, $output);
+    echo "✅ Output written to: $outPath\n";
+} catch (\Throwable $e) {
+    echo "❌ Error: " . $e->getMessage() . PHP_EOL;
+    exit(1);
+}

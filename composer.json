@@ -1,0 +1,21 @@
+{
+    "name": "emmy/nkem",
+    "description": "A package that replaces values in a JSON file to their \\\"types\\\" in either Typescript, JSON or PHP",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Emmy\\Nkem\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "SirMekus",
+            "email": "mekus600@gmail.com"
+        }
+    ],
+    "bin": [
+        "bin/type"
+    ],
+    "require": {}
+}
