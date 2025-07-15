@@ -1,6 +1,6 @@
 {
     "name": "sirmekus/nkem",
-    "description": "A package that replaces values in a JSON file to their \\\"types\\\" in either Typescript, JSON or PHP",
+    "description": "A package that replaces values in a JSON file to their \\\"types\\\" in either Typescript, JSON",
     "type": "library",
     "license": "MIT",
     "autoload": {
@@ -17,5 +17,7 @@
     "bin": [
         "bin/type"
     ],
-    "require": {}
+    "require": {
+        "php": "^8.0"
+    }
 }
