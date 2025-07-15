@@ -4,6 +4,8 @@ This is a CLI package that replaces values in a JSON file to their types in eith
 
 If you work on developing API, you'll agree that it's important to have a good understanding of the data that's being sent to and from the API/server. This package aims to make that process easier by generating types for your JSON files via feeding it with a sample of an actual response (stored in a JSON file).
 
+> By the way, "Nkem" is a word that means "my own" in Igbo language.  😉
+
 ## Installation
 
 To install the package, run:
@@ -30,9 +32,11 @@ If you want its TypeScript representation, run it like so:
 
 The types will be generated based on the values in the JSON file. 
 
-Also, if a key can contain "union" types, the package may not be able to interpret it correctly. For example, if the JSON file contains a key that can be either a string or an integer but the value in the given file is a string, the type will be generated as `string`. 
+Also, if a key can contain a range of possible types (like "string|number"), the package may not be able to interpret it correctly. For example, if the JSON file contains a key whose value can either be a string or an number but the value in the JSON file is a string, its type will be generated as `string`. 
 
-Primarily, the package does the heavy lifting of generating the types for you.
+To rectify this limitation, manual interaction may be required for the affected keys after generating the types.
+
+Primarily, the package does the heavy lifting of generating the types for you. 
 
 ## Contributing
 
